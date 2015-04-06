@@ -1,0 +1,24 @@
+{
+  "name": "mulford/generators",
+  "description": "Extend Laravel 5's generators.",
+  "keywords": ["laravel", "generators", "fractal"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ken Mulford",
+      "email": "ken@kenmulford.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "illuminate/database": "~5.0",
+    "league/fractal": "0.12.*"
+  },
+  "require-dev": {
+  },
+  "autoload": {
+    "psr-4": {
+      "Mulford\\Generators\\": "src/"
+    }
+  }
+}
