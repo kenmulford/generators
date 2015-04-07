@@ -1,12 +1,6 @@
 # Laravel 5/Fractal Transformer Generator
 
-This extends the php artisan command list to include a command for generating a basic transformer based on your existing Eloquent model.
-
-- `make:transformer`
-
-## Fractal
-
-[PHP League/Fractal](http://fractal.thephpleague.com/ "PHP League: Fractal") is the library I've been using for transformations. The transformer files will be generated in the format suggested by their docs.
+This extends the php artisan command list to include a command for generating a basic [Fractal](http://fractal.thephpleague.com/ "PHP League: Fractal") transformer based on your existing Eloquent model.
 
 ## Usage
 
@@ -26,7 +20,7 @@ Open `config/app.php` and add the line to the bottom of your `providers` array:
 
 ### Step 3: Run Artisan
 
-Run `php artisan list` from the console and you will see `make:transformer' in the "make" section.
+Run `php artisan list` from the console and you will see `make:transformer` in the "make" section.
 
 ## Defaults
 
