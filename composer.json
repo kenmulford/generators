@@ -16,7 +16,6 @@
   },
   "require-dev": {
   },
-  "version": "v0.1.0",
   "autoload": {
     "psr-4": {
       "Mulford\\Generators\\": "src/"
