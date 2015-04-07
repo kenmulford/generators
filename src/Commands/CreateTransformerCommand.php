@@ -1,4 +1,4 @@
-<?php namespace Mulford\Generators;
+<?php namespace Mulford\Generators\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;

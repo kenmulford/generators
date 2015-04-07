@@ -1,6 +1,4 @@
-<?php
-
-namespace Mulford\Generators;
+<?php namespace Mulford\Generators;
 
 use Illuminate\Support\ServiceProvider;
 
