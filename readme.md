@@ -4,6 +4,10 @@ This extends the php artisan command list to include a command for generating a 
 
 - `make:transformer`
 
+## Fractal
+
+[PHP League/Fractal](http://fractal.thephpleague.com/ "PHP League: Fractal") is the library I've been using for transformations. The transformer files will be generated in the format suggested by their docs.
+
 ## Usage
 
 ### Step 1: Install Via Composer
