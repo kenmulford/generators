@@ -39,7 +39,7 @@ class CreateTransformerCommand extends GeneratorCommand {
    *
    * @var string
    */
-  protected $model_namespace = 'App/Models';
+  protected $model_namespace = 'App\Models';
 
   /**
    * The model namespace.
