@@ -35,6 +35,20 @@ class CreateTransformerCommand extends GeneratorCommand {
   protected $model;
 
   /**
+   * The model namespace.
+   *
+   * @var string
+   */
+  protected $model_namespace = 'App/Models';
+
+  /**
+   * The model namespace.
+   *
+   * @var string
+   */
+  protected $transformer_namespace = 'app/Transformers';
+
+  /**
    * The fillable fields of the model being imported.
    *
    * @var array
@@ -70,7 +84,7 @@ class CreateTransformerCommand extends GeneratorCommand {
    */
   protected function getPath($name)
   {
-    return './app/Transformers/'.str_replace('\\', '/', $name).'.php';
+    return './'.$this->option('transformerNamespace').'/'.str_replace('\\', '/', $name).'.php';
   }
 
 
@@ -82,6 +96,8 @@ class CreateTransformerCommand extends GeneratorCommand {
   public function fire()
   {
     $this->model = $this->option('model');
+    $this->model_namespace = $this->option('modelNamespace');
+    $this->transformer_namespace = ucwords( $this->option('transformerPath') );
 
     $this->fields = $this->getModelFields();
 
@@ -99,6 +115,32 @@ class CreateTransformerCommand extends GeneratorCommand {
 
     $this->info($this->type.' created successfully.');
 
+  }
+
+  /**
+   * Get the console command arguments.
+   *
+   * @return array
+   */
+  protected function getArguments()
+  {
+    return [
+      // ['model', InputArgument::REQUIRED, 'Name of the Eloquent model class (--model=User)'],
+    ];
+  }
+
+  /**
+   * Get the console command options.
+   *
+   * @return array
+   */
+  protected function getOptions()
+  {
+    return [
+      ['model', null, InputOption::VALUE_REQUIRED, 'Name of the Eloquent model class (--model=User)', null],
+      ['modelNamespace', null, InputOption::VALUE_OPTIONAL, 'Namespace for your models (default: --modelNamespace=App\Models)', null],
+      ['transformerPath', null, InputOption::VALUE_OPTIONAL, 'Name of the Eloquent model class (default: --transformerPath=app\Transformers)', null],
+    ];
   }
 
   /**
@@ -134,33 +176,31 @@ class CreateTransformerCommand extends GeneratorCommand {
 
   }
 
-
-
   /**
-   * Get the console command arguments.
+   * OVERRIDE: Replace the namespace for the given stub.
    *
-   * @return array
+   * @param  string  $stub
+   * @param  string  $name
+   * @return $this
    */
-  protected function getArguments()
+  protected function replaceNamespace(&$stub, $name)
   {
-    return [
-      // ['model', InputArgument::REQUIRED, 'Name of the Eloquent model class (--model=User)'],
-    ];
+    $stub = str_replace(
+      '{{transformer_namespace}}', ucwords($this->transformer_namespace), $stub
+    );
+
+    $stub = str_replace(
+      '{{model_namespace}}', ucwords($this->model_namespace), $stub
+    );
+
+    return $this;
   }
 
   /**
-   * Get the console command options.
-   *
+   * Retrieves all fillable fields from the specified model
+   * 
    * @return array
-   */
-  protected function getOptions()
-  {
-    return [
-      ['model', null, InputOption::VALUE_REQUIRED, 'Name of the Eloquent model class (--model=User)', null],
-    ];
-  }
-
-
+   */ 
 
   private function getModelFields() {
 
@@ -171,13 +211,46 @@ class CreateTransformerCommand extends GeneratorCommand {
 
   }
 
+  /**
+   * Retrieves all fillable fields from the specified model
+   * 
+   * @return array
+   */ 
+
+  private function getModelRelations() {
+
+    $model = (string)"\App\Models\\" . $this->model;
+    $record = new $model();
+
+    return $record->getRelations();
+
+  }
+
+  /**
+   * Retrieves all fillable fields and turns them into an array in
+   * the transform() method of the Transformer file. 
+   * 
+   * @param string $stub 
+   * 
+   * @return object $this
+   */ 
+
   private function populateTransformFields(&$stub) {
 
-    $rows = [];
+    $rows[] = '"id" => $record->id'.PHP_EOL;
+
     foreach($this->fields as $key=>$name) {
+      if($name != 'id') {
+        // don't re-insert the PK
+        $rows[] = '"'.$name.'" => $record->'.$name.PHP_EOL;
+      }
+    }
 
-      $rows[] = '"'.$name.'" => $record->'.$name.PHP_EOL;
-
+    if( !isset($rows['created_at']) ) {
+      $rows[] = '",created_at" => $record->created_at'.PHP_EOL;
+    }
+    if( !isset($rows['updated_at']) ) {
+      $rows[] = '",updated_at" => $record->updated_at'.PHP_EOL;
     }
 
     $field_string = implode("      ,", $rows);
