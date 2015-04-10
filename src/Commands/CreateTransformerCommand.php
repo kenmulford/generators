@@ -113,6 +113,7 @@ class CreateTransformerCommand extends GeneratorCommand {
     }
 
     if( !empty($transformer_path) ) {
+      $this->path = $this->option('transformerPath');
       $this->transformer_namespace = ucwords( $this->option('transformerPath') );
     }
 
@@ -221,7 +222,7 @@ class CreateTransformerCommand extends GeneratorCommand {
 
   private function getModelFields() {
 
-    $model = (string)"\App\Models\\" . $this->model;
+    $model = (string)$this->model_namespace ."\\". $this->model;
     $record = new $model();
 
     return $record->getFillable();
@@ -236,7 +237,7 @@ class CreateTransformerCommand extends GeneratorCommand {
 
   private function getModelRelations() {
 
-    $model = (string)"\App\Models\\" . $this->model;
+    $model = (string)$this->model_namespace ."\\". $this->model;
     $record = new $model();
 
     return $record->getRelations();
