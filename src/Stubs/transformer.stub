@@ -1,6 +1,6 @@
-<?php namespace App\Transformers;
+<?php namespace {{transformer_namespace}};
 
-use App\Models\{{model}};
+use {{model_namespace}}\{{model}};
 use \League\Fractal;
 
 class {{class}} extends Fractal\TransformerAbstract
