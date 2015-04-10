@@ -46,7 +46,15 @@ class CreateTransformerCommand extends GeneratorCommand {
    *
    * @var string
    */
-  protected $transformer_namespace = 'app/Transformers';
+  protected $transformer_namespace = 'App/Transformers';
+
+  /**
+   * Path the file will be saved to
+   * 
+   * @var string
+   */
+
+  protected $path = 'app/Transformers';
 
   /**
    * The fillable fields of the model being imported.
@@ -84,7 +92,7 @@ class CreateTransformerCommand extends GeneratorCommand {
    */
   protected function getPath($name)
   {
-    return './'.$this->option('transformerPath').'/'.str_replace('\\', '/', $name).'.php';
+    return './'.$this->path.'/'.str_replace('\\', '/', $name).'.php';
   }
 
 
@@ -96,8 +104,17 @@ class CreateTransformerCommand extends GeneratorCommand {
   public function fire()
   {
     $this->model = $this->option('model');
-    $this->model_namespace = $this->option('modelNamespace');
-    $this->transformer_namespace = ucwords( $this->option('transformerPath') );
+
+    $user_namespace = $this->option('modelNamespace');
+    $transformer_path = $this->option('transformerPath');
+
+    if( !empty($user_namespace) ) {
+      $this->model_namespace = $this->option('modelNamespace');
+    }
+
+    if( !empty($transformer_path) ) {
+      $this->transformer_namespace = ucwords( $this->option('transformerPath') );
+    }
 
     $this->fields = $this->getModelFields();
 
