@@ -84,7 +84,7 @@ class CreateTransformerCommand extends GeneratorCommand {
    */
   protected function getPath($name)
   {
-    return './'.$this->option('transformerNamespace').'/'.str_replace('\\', '/', $name).'.php';
+    return './'.$this->option('transformerPath').'/'.str_replace('\\', '/', $name).'.php';
   }
 
 
